@@ -8,8 +8,6 @@
       container
       view="lHr LpR lFr"
     >
-      <!-- view="lHr LpR lFr" -->
-      <!-- :behavior="!ticketFocado.id ? 'desktop' : 'default'" -->
       <q-drawer
         v-model="drawerTickets"
         @hide="drawerTickets = false"
@@ -21,15 +19,14 @@
         :width="$q.screen.lt.md ? $q.screen.width : 380"
         content-class="hide-scrollbar full-width"
       >
-        <!-- :behavior="$q.screen.lt.sm && (drawerTickets || !ticketFocado.id) ? 'desktop' : 'default'" -->
         <q-toolbar
-          class="q-pr-none q-gutter-xs full-width"
+          class="q-gutter-xs full-width"
           style="height: 64px"
         >
           <q-btn-dropdown
             no-caps
-            flat
-            class="bg-padrao text-bold btn-rounded"
+            color="black"
+            class="text-bold btn-rounded"
             ripple
           >
             <template v-slot:label>
@@ -74,8 +71,8 @@
           </q-btn-dropdown>
           <q-space />
           <q-btn
-            flat
-            class="bg-padrao btn-rounded"
+            color="black"
+            class="btn-rounded"
             icon="mdi-home"
             @click="() => $router.push({ name: 'home-dashboard' })"
           >
@@ -83,10 +80,6 @@
               Retornar ao menu
             </q-tooltip>
           </q-btn>
-          <!-- <StatusWhatsapp
-            class="q-mr-sm"
-            isIconStatusMenu
-          /> -->
         </q-toolbar>
         <StatusWhatsapp
           v-if="false"
@@ -99,8 +92,7 @@
           <q-separator class="absolute-top" />
           <q-btn
             :icon="!cFiltroSelecionado ? 'mdi-filter-outline' : 'mdi-filter-plus'"
-            flat
-            class="bg-padrao btn-rounded "
+            class="btn-rounded "
             :color="cFiltroSelecionado ? 'deep-orange-9' : 'primary'"
           >
             <q-menu
@@ -128,7 +120,7 @@
                   <div v-if="!pesquisaTickets.showAll">
                     <q-select
                       :disable="pesquisaTickets.showAll"
-                      square
+                      rounded
                       dense
                       outlined
                       hide-bottom-space
@@ -223,9 +215,10 @@
                   />
                   <q-btn
                     class="float-right q-my-md"
-                    color="primary"
+                    color="negative"
                     label="Fechar"
                     push
+                    rounded
                     v-close-popup
                   />
                 </div>
@@ -250,8 +243,8 @@
             </template>
           </q-input>
           <q-btn
-            flat
-            class=" bg-padrao btn-rounded"
+            color="primary"
+            class="btn-rounded"
             icon="mdi-book-account-outline"
             @click="$q.screen.lt.md ? modalNovoTicket = true : $router.push({ name: 'chat-contatos' })"
           >
@@ -1014,7 +1007,7 @@ export default {
           console.log('Conteúdo copiado: ', content)
         })
         .catch((error) => {
-        // Ocorreu um erro ao copiar
+          // Ocorreu um erro ao copiar
           console.error('Erro ao copiar o conteúdo: ', error)
         })
     },

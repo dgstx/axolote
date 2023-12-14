@@ -26,25 +26,6 @@ export default {
     socketInitial () {
       socket.emit(`${usuario.tenantId}:joinNotification`)
 
-      // socket.on(`${ usuario.tenantId }:ticket`, data => {
-      //   if (!verifySocketTicketAction(data.ticket, data.action)) return
-      //   if (data.action === 'updateUnread' || data.action === 'delete') {
-
-      //   }
-      // })
-
-      // socket.on(`${ usuario.tenantId }:appMessage`, data => {
-      //   if (
-      //     data.action === 'create' &&
-      //     !data.message.read &&
-      //     (data.ticket.userId === userId || !data.ticket.userId)
-      //   ) {
-      //     if (isQueueOrUserNotify(data.ticket)) {
-      //       this.handlerNotifications(data)
-      //     }
-      //   }
-      // })
-
       socket.io.on(`${usuario.tenantId}:whatsapp`, data => {
         if (data.action === 'update') {
           this.$store.commit('UPDATE_WHATSAPPS', data.whatsapp)
@@ -146,9 +127,6 @@ export default {
       socket.on(`${usuario.tenantId}:ticketList`, async data => {
         var verify = []
         if (data.type === 'notification:new') {
-          // console.log(data)
-          // Atualiza notificações de mensagem
-          // var data_noti = []
           const params = {
             searchParam: '',
             pageNumber: 1,
@@ -159,7 +137,6 @@ export default {
             withUnreadMessages: false,
             isNotAssignedUser: false,
             includeNotQueueDefined: true
-            // date: new Date(),
           }
           try {
             const data_noti = await ConsultarTickets(params)
@@ -182,40 +159,12 @@ export default {
           }
         }
       })
-
-      /*
-      socket.on(`${usuario.tenantId}:ticketList`, data => {
-        if (data.type === 'chat:create') {
-          if (
-            !data.payload.read &&
-            (data.payload.ticket.userId === userId || !data.payload.ticket.userId) &&
-            data.payload.ticket.id !== this.$store.getters.ticketFocado.id
-          ) {
-            if (checkTicketFilter(data.payload.ticket)) {
-              this.handlerNotifications(data.payload)
-            }
-          }
-          this.$store.commit('UPDATE_MESSAGES', data.payload)
-          this.scrollToBottom()
-        }
-        if (data.type === 'chat:ack' || data.type === 'chat:delete') {
-          this.$store.commit('UPDATE_MESSAGE_STATUS', data.payload)
-        }
-        if (data.type === 'ticket:update') {
-          console.log('Atualização de Ticket')
-          console.log(data)
-        }
-      })
-      socket.on(`${usuario.tenantId}:contactList`, data => {
-        this.$store.commit('UPDATE_CONTACT', data.payload)
-      })
-      */
     }
   },
   mounted () {
     this.socketInitial()
   },
   destroyed () {
-    socket.disconnect()
+    socket && socket.disconnect()
   }
 }

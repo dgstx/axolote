@@ -18,9 +18,9 @@
       <q-card-section class="q-pb-none">
         <div class="row q-gutter-sm">
           <q-input
-            class="required"
             outlined
             dense
+            rounded
             style="width: 500px"
             v-model="campanha.name"
             label="Nome da Campanha"
@@ -31,6 +31,7 @@
           <q-datetime-picker
             style="width: 200px"
             dense
+            rounded
             hide-bottom-space
             outlined
             stack-label
@@ -45,7 +46,7 @@
             error-message="Não pode ser inferior ao dia atual"
           />
           <q-select
-            class="required"
+            rounded
             dense
             outlined
             emit-value
@@ -64,7 +65,7 @@
             style="width: 250px"
           />
           <q-input
-            class="required"
+            rounded
             outlined
             dense
             style="width: 160px"
@@ -76,6 +77,7 @@
           />
           <q-file
             dense
+            rounded
             v-if="!campanha.mediaUrl"
             :loading="loading"
             label="Mídia composição mensagem"
@@ -99,6 +101,7 @@
           <q-input
             v-if="campanha.mediaUrl"
             readonly
+            rounded
             label="Mídia composição mensagem"
             :value="cArquivoName"
             class=" col-grow "
@@ -159,7 +162,7 @@
               <textarea
                 ref="message1"
                 style="min-height: 12.5vh; max-height: 12.5vh;"
-                class="q-pa-sm bg-white full-width rounded-borders"
+                class="q-pa-sm bg-white full-width rounded-all"
                 :class="{
                   'bg-red-1': $v.campanha.message1.$error
                 }"
@@ -209,7 +212,7 @@
               <textarea
                 ref="message2"
                 style="min-height: 12.5vh; max-height: 12.5vh;"
-                class="q-pa-sm bg-white full-width rounded-borders"
+                class="q-pa-sm bg-white full-width rounded-all"
                 placeholder="Digite a mensagem"
                 autogrow
                 dense
@@ -259,7 +262,7 @@
               <textarea
                 ref="message3"
                 style="min-height: 12.5vh; max-height: 12.5vh;"
-                class="q-pa-sm bg-white full-width rounded-borders"
+                class="q-pa-sm bg-white full-width rounded-all"
                 placeholder="Digite a mensagem"
                 autogrow
                 dense
@@ -299,7 +302,7 @@
                 <MensagemChat
                   :isLineDate="false"
                   size="8"
-                  class="full-width"
+                  class="full-width rounded-all"
                   :mensagens="cMessages"
                 />
               </cMolduraCelular>
@@ -315,8 +318,10 @@
             color="negative"
             v-close-popup
             class="q-mr-md"
+            rounded
           />
           <q-btn
+            rounded
             label="Salvar"
             color="positive"
             icon="save"
@@ -343,7 +348,7 @@ const isValidDate = (v) => {
 }
 
 const downloadImageCors = axios.create({
-  baseURL: process.env.URL_API,
+  baseURL: process.env.VUE_URL_API,
   timeout: 20000,
   headers: {
     responseType: 'blob'

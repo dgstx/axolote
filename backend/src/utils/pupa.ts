@@ -60,7 +60,6 @@ export class MissingValueError extends Error {
 
 const greeting = (() => {
   const hours = getHours(new Date());
-  console.log("greeting", hours);
   if (hours >= 6 && hours <= 11) {
     return "Bom dia!";
   }

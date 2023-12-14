@@ -1,7 +1,7 @@
 #!/bin/bash
-echo  "Updating DigitalSac, please wait."
+echo  "Updating WAS, please wait."
 cd  ~
-cd izing.io
+cd was
 git checkout master
 git pull
 cd backend

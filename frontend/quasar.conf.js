@@ -46,10 +46,8 @@ module.exports = function (ctx) {
     // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-build
     build: {
       env: {
-        URL_API: process.env.URL_API,
-        FACEBOOK_APP_ID: process.env.FACEBOOK_APP_ID,
-        USUARIO_API: process.env.USUARIO_API,
-        SENHA_API: process.env.SENHA_API
+        VUE_URL_API: process.env.VUE_URL_API,
+        VUE_FACEBOOK_APP_ID: process.env.VUE_FACEBOOK_APP_ID
       },
       vueRouterMode: 'hash', // available values: 'hash', 'history'
 
@@ -130,10 +128,9 @@ module.exports = function (ctx) {
       workboxPluginMode: 'GenerateSW', // 'GenerateSW' or 'InjectManifest'
       workboxOptions: {}, // only for GenerateSW
       manifest: {
-        name: 'IZINGPRO',
-        maximumFileSizeToCacheInBytes: '5000000',
-        short_name: 'IZINGPRO',
-        description: 'Bot Multi-atendimento para whatsapp',
+        name: 'Wasapp',
+        short_name: 'Wasap',
+        description: 'Multiatendimento',
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#ffffff',
@@ -197,7 +194,7 @@ module.exports = function (ctx) {
 
       builder: {
         // https://www.electron.build/configuration/configuration
-        appId: 'IZINGPRO'
+        appId: 'Wasap'
       },
 
       // More info: https://quasar.dev/quasar-cli/developing-electron-apps/node-integration

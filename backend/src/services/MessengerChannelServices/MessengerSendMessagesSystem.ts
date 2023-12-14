@@ -88,7 +88,6 @@ const MessengerSendMessagesSystem = async (
         const customPath = join(__dirname, "..", "..", "..", "public");
         const mediaPath = join(customPath, message.mediaName);
         const file: Buffer = await readFile(mediaPath);
-        console.log(mediaPath);
         if (message.mediaType === "audio" || message.mediaType === "ptt") {
           const splitName = message.mediaName.split(".");
           const newAudioPath = join(customPath, `${splitName[0]}.mp4`);

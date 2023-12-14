@@ -1,31 +1,30 @@
 <template>
   <div>
-    <div class="row col full-width q-pa-lg">
+    <div class="row col full-width q-pa-sm">
       <q-card
         flat
-        bordered
         class="full-width"
       >
         <q-card-section class="text-h6 text-bold">
-          Canais de Comunicação
-          <div class="absolute-top-right q-pa-sm">
+          Canais
+          <div class="absolute-right q-pa-md">
             <q-btn
-              color="primary"
-              icon="add"
+              rounded
+              color="black"
+              icon="mdi-plus"
               label="Adicionar"
               @click="modalWhatsapp = true"
             />
           </div>
-          <q-separator />
         </q-card-section>
       </q-card>
     </div>
-    <div class="row full-width q-py-lg q-px-md ">
+    <div class="row full-width">
       <template v-for="item in canais">
         <q-card
           flat
           bordered
-          class="col-xs-12 col-sm-5 col-md-4 col-lg-3 q-ma-md"
+          class="col-xs-12 col-sm-5 col-md-4 col-lg-3 q-ma-sm"
           :key="item.id"
         >
           <q-item>
@@ -48,18 +47,10 @@
                 round
                 flat
                 dense
-                icon="edit"
+                icon="mdi-pen"
                 @click="handleOpenModalWhatsapp(item)"
                 v-if="isAdmin"
               />
-              <!-- <q-btn
-            round
-            flat
-            dense
-            icon="delete"
-            @click="deleteWhatsapp(props.row)"
-            v-if="$store.getters['isSuporte']"
-          /> -->
             </q-item-section>
           </q-item>
           <q-separator />
@@ -76,7 +67,8 @@
             <q-select
               outlined
               dense
-              label="ChatBot"
+              rounded
+              label="Bot"
               v-model="item.chatFlowId"
               :options="listaChatFlow"
               map-options
@@ -86,7 +78,6 @@
               clearable
               @input="handleSaveWhatsApp(item)"
             />
-            <!-- @input="atualizarConfiguracao('botTicketActive')" -->
           </q-card-section>
           <q-separator />
           <q-card-actions
@@ -95,6 +86,7 @@
           >
             <template v-if="item.type !== 'messenger'">
               <q-btn
+                rounded
                 v-if="item.type == 'whatsapp' && item.status == 'qrcode'"
                 color="blue-5"
                 label="QR Code"
@@ -108,11 +100,13 @@
                 class="q-gutter-sm"
               >
                 <q-btn
+                  rounded
                   color="positive"
                   label="Conectar"
                   @click="handleStartWhatsAppSession(item.id)"
                 />
                 <q-btn
+                  rounded
                   v-if="item.status == 'DISCONNECTED' && item.type == 'whatsapp'"
                   color="blue-5"
                   label="Novo QR Code"
@@ -147,24 +141,6 @@
                 :disable="!isAdmin"
                 class="q-mx-sm"
               />
-            </template>
-
-            <template v-if="item.type === 'messenger'">
-              <VFacebookLogin
-                :app-id="cFbAppId"
-                @sdk-init="handleSdkInit"
-                @login="login => fbLogin(login, item)"
-                @logout="logout => fbLogout(item)"
-                :login-options="FBLoginOptions"
-                version="v12.0"
-              >
-                <template slot="login">
-                  {{ item.status === 'CONNECTED' ? 'Editar' : 'Conectar' }}
-                </template>
-                <template slot="logout">
-                  {{ item.status === 'DISCONNECTED' ? 'Conectar' : 'Editar' }}
-                </template>
-              </VFacebookLogin>
             </template>
             <q-btn
               color="red"
@@ -212,8 +188,6 @@ import ModalQrCode from './ModalQrCode'
 import { mapGetters } from 'vuex'
 import ModalWhatsapp from './ModalWhatsapp'
 import ItemStatusChannel from './ItemStatusChannel'
-import VFacebookLogin from 'vue-facebook-login-component'
-import { FetchFacebookPages, LogoutFacebookPages } from 'src/service/facebook'
 import { ListarChatFlow } from 'src/service/chatFlow'
 
 const userLogado = JSON.parse(localStorage.getItem('usuario'))
@@ -223,8 +197,7 @@ export default {
   components: {
     ModalQrCode,
     ModalWhatsapp,
-    ItemStatusChannel,
-    VFacebookLogin
+    ItemStatusChannel
   },
   data () {
     return {
@@ -284,17 +257,7 @@ export default {
           field: 'acoes',
           align: 'center'
         }
-      ],
-      FB: {},
-      FBscope: {},
-      FBLoginOptions: {
-        scope:
-          'pages_manage_metadata,pages_messaging,instagram_basic,pages_show_list,pages_read_engagement,instagram_manage_messages'
-      },
-      FBPageList: [],
-      fbSelectedPage: { name: null, id: null },
-      fbPageName: '',
-      fbUserToken: ''
+      ]
     }
   },
   watch: {
@@ -307,9 +270,6 @@ export default {
   },
   computed: {
     ...mapGetters(['whatsapps']),
-    cFbAppId () {
-      return process.env.FACEBOOK_APP_ID
-    },
     cDadosWhatsappSelecionado () {
       const { id } = this.whatsappSelecionado
       return this.whatsapps.find(w => w.id === id)
@@ -318,49 +278,6 @@ export default {
   methods: {
     formatarData (data, formato) {
       return format(parseISO(data), formato, { locale: pt })
-    },
-    handleSdkInit ({ FB }) {
-      this.FB = FB
-      // try login
-
-      // this.FBscope = scope
-    },
-    async fbLogout (whatsapp) {
-      console.info('fbLogout')
-      await LogoutFacebookPages(whatsapp)
-    },
-    fbLogin (login, channel) {
-      if (login?.status === 'connected') {
-        this.fbFetchPages(
-          login.authResponse.accessToken,
-          login.authResponse.userID,
-          channel
-        )
-        console.info('fbLogin in connected')
-      } else if (login?.status === 'not_authorized') {
-        // The person is logged into Facebook, but not your app.
-        console.info('fbLogin in not_authorized')
-      } else {
-        // The person is not logged into Facebook, so we're not sure if
-        // they are logged into this app or not.
-        console.info('fbLogin in not logged')
-      }
-    },
-    async fbFetchPages (_token, _accountId, channel) {
-      try {
-        const response = await FetchFacebookPages({
-          whatsapp: channel,
-          userToken: _token,
-          accountId: _accountId
-        })
-        const {
-          data: { data }
-        } = response
-        this.FBPageList = data.page_details
-        this.fbUserToken = data.user_access_token
-      } catch (error) {
-        // Ignore error
-      }
     },
     handleOpenQrModal (channel) {
       this.whatsappSelecionado = channel
@@ -373,7 +290,6 @@ export default {
     async handleDisconectWhatsSession (whatsAppId) {
       this.$q.dialog({
         title: 'Atenção!! Deseja realmente desconectar? ',
-        // message: 'Mensagens antigas não serão apagadas no whatsapp.',
         cancel: {
           label: 'Não',
           color: 'primary',
@@ -405,7 +321,6 @@ export default {
         console.error(error)
       }
     },
-
     async handleRequestNewQrCode (channel, origem) {
       if (channel.type === 'telegram' && !channel.tokenTelegram) {
         this.$notificarErro('Necessário informar o token para Telegram')

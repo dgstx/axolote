@@ -15,7 +15,7 @@ interface Request {
 
 const api_version = "v16.0";
 const baseUrl = `https://graph.facebook.com/${api_version}`;
-const app_id = process.env.FACEBOOK_APP_ID;
+const app_id = process.env.VUE_FACEBOOK_APP_ID;
 const app_secret = process.env.FACEBOOK_APP_SECRET_KEY;
 
 const getLongLivedAccessToken = async (short_lived_token: string) => {
@@ -102,7 +102,7 @@ const GetTokenAndLinkedPage = async ({
       session: { ...whatsapp, ...dataUpdated }
     });
   } catch (error) {
-    console.log(error);
+    console.error("GetTokenAndLinkedPage", error);
     throw new AppError(error, 400);
   }
 };

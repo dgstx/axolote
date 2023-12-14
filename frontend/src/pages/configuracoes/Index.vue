@@ -94,6 +94,7 @@
             style="width: 300px"
             outlined
             dense
+            rounded
             v-model="botTicketActive"
             :options="listaChatFlow"
             map-options
@@ -157,6 +158,7 @@
       >
         <div class="col-12">
           <q-input
+            rounded
             v-model="callRejectMessage"
             type="textarea"
             autogrow
